@@ -1,6 +1,6 @@
 export * from "./components";
 export * from "./charts";
-export * from "./maps";
+export * from "./sections";
 export * from "./layout/Header";
 export * from "./layout/Sidebar";
 export * from "./layout/Footer";

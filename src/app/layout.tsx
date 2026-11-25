@@ -28,15 +28,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AstraStudio — UI Astra + Next.js + Clerk",
+  title: "MARKET INTELLIGENCE — Live SENSEX, Gold & Silver Terminal",
   description:
-    "Modern Next.js App Router application built with UI Astra design tokens, reusable src/UI components, and Clerk authentication.",
+    "Real-time Indian financial market intelligence dashboard for BSE SENSEX, 24K/22K/18K Gold, Silver, technical indicators, and price alerts.",
 };
 
 const NAV_ITEMS = [
-  { label: "Overview", href: "/" },
-  { label: "Components", href: "/components" },
-  { label: "Dashboard", href: "/dashboard" },
+  { label: "Market Terminal", href: "/" },
+  { label: "Analytics Workspace", href: "/dashboard" },
 ];
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -71,12 +70,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <ThemeProvider>
             <ToastProvider>
               <Header
-                brandName="AstraStudio"
+                brandName="MARKET INTELLIGENCE"
                 navItems={NAV_ITEMS}
                 authSlot={authSlot}
               />
               <main className="flex-1">{children}</main>
-              <Footer brandName="AstraStudio" />
+              <Footer brandName="MARKET INTELLIGENCE" />
             </ToastProvider>
           </ThemeProvider>
         </ClerkProvider>

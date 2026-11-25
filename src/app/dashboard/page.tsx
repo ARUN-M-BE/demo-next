@@ -1,26 +1,23 @@
 import { Suspense } from "react";
 import { currentUser } from "@clerk/nextjs/server";
 import { Loader } from "@/UI";
-import { AnalyticsDashboard } from "@/features/analytics/components/AnalyticsDashboard";
+import { MarketTerminal } from "@/features/market/MarketTerminal";
 
-async function DashboardWithUser() {
+async function TerminalWithUser() {
   let userName: string | null = null;
-  let userEmail: string | null = null;
-
   try {
     const user = await currentUser();
     if (user) {
       userName =
         [user.firstName, user.lastName].filter(Boolean).join(" ") ||
         user.username ||
-        "Authenticated User";
-      userEmail = user.emailAddresses[0]?.emailAddress ?? null;
+        "Authenticated Analyst";
     }
   } catch {
-    // Graceful fallback when Clerk keys are not yet configured
+    // Graceful fallback when Clerk keys are not yet linked
   }
 
-  return <AnalyticsDashboard userName={userName} userEmail={userEmail} />;
+  return <MarketTerminal userName={userName} />;
 }
 
 export default function DashboardPage() {
@@ -28,11 +25,11 @@ export default function DashboardPage() {
     <Suspense
       fallback={
         <div className="bg-analytics-canvas flex min-h-screen items-center justify-center">
-          <Loader size="lg" label="Loading analytics dashboard..." />
+          <Loader size="lg" label="Loading Market Intelligence..." />
         </div>
       }
     >
-      <DashboardWithUser />
+      <TerminalWithUser />
     </Suspense>
   );
 }

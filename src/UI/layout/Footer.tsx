@@ -25,19 +25,13 @@ export function Footer({ brandName = "AstraStudio", className }: FooterProps) {
             href="/"
             className="transition-colors hover:text-grayscale-textIcon-title"
           >
-            Overview
-          </Link>
-          <Link
-            href="/components"
-            className="transition-colors hover:text-grayscale-textIcon-title"
-          >
-            Components
+            Market Terminal
           </Link>
           <Link
             href="/dashboard"
             className="transition-colors hover:text-grayscale-textIcon-title"
           >
-            Dashboard
+            Analytics Workspace
           </Link>
         </div>
       </div>
