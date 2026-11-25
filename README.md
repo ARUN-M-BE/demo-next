@@ -78,3 +78,38 @@ Configure the following repository secrets in **GitHub → Settings → Secrets 
   npm run build
   ```
 - **Deployment logs**: Open the **CD** workflow run in GitHub Actions to view the Vercel CLI build/deploy output and the published deployment URL in the job summary.
+
+
+---
+
+## GitHub Pages Hosting & Deployment
+
+This repository also includes `.github/workflows/deploy.yml` for **GitHub Pages** static export deployment (`actions/configure-pages@v5`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`).
+
+> **Important Architecture Note (Next.js Server Features vs. Static Export):**
+> GitHub Pages serves **static files only** (`./out`). The Market Intelligence application currently uses Next.js API routes (`/api/market/*`, `/api/alerts/*`), `src/proxy.ts` (Clerk middleware), and server-side rendering (`connection()` in `src/app/page.tsx` and `src/app/dashboard/page.tsx`).
+> - For full-stack deployment with live API routes and SSR, use **`cd.yml` (Vercel)**.
+> - For static GitHub Pages (`deploy.yml` with `GITHUB_PAGES=true`), `next.config.ts` enables `output: "export"`, `trailingSlash: true`, `images: { unoptimized: true }`, and `basePath: "/demo-next"`. To run a pure static export, API routes (`src/app/api/`) and `src/proxy.ts` must be hosted on an independent backend service and removed from the static build tree.
+
+### GitHub Repository Settings (Pages)
+
+1. Open your GitHub repository (`ARUN-M-BE/demo-next`).
+2. Navigate to **Settings → Pages**.
+3. Under **Build and deployment**, set **Source** to **GitHub Actions**.
+4. Save the configuration.
+5. Open **Actions → Deploy to GitHub Pages** and run the workflow (or push to `main`).
+6. Verify the published URL (`https://arun-m-be.github.io/demo-next/`).
+
+### Custom Domain Support
+
+1. In **Settings → Pages → Custom domain**, enter your domain (e.g., `markets.example.com`) and enable **Enforce HTTPS**.
+2. Set repository variable `PAGES_CUSTOM_DOMAIN` (under **Settings → Secrets and variables → Actions → Variables**) to your domain so `deploy.yml` builds with an empty `basePath` instead of `/demo-next`.
+3. Configure DNS records at your DNS provider without overwriting existing MX/TXT/unrelated records:
+   - **Subdomain (`www` / `markets`):** `CNAME` record pointing to `arun-m-be.github.io.`
+   - **Apex domain (`example.com`):** `A` records pointing to GitHub Pages IPs (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`).
+
+### Local Static Export Check
+
+```bash
+GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/demo-next npm run build
+```

@@ -1,6 +1,8 @@
+import { randomUUID } from "node:crypto";
 import type { MarketAlert, MarketAssetId } from "@/types/market";
 
 const alertStore = new Map<string, MarketAlert>();
+const MAX_ALERTS = 100;
 
 export function listAlerts(): MarketAlert[] {
   return Array.from(alertStore.values()).sort((a, b) =>
@@ -14,7 +16,11 @@ export function createAlert(input: {
   targetValue: number;
   unit: string;
 }): MarketAlert {
-  const id = `alt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+  if (alertStore.size >= MAX_ALERTS) {
+    const oldestKey = alertStore.keys().next().value;
+    if (oldestKey) alertStore.delete(oldestKey);
+  }
+  const id = `alt_${randomUUID()}`;
   const alert: MarketAlert = {
     id,
     asset: input.asset,
@@ -32,11 +38,28 @@ export function createAlert(input: {
 
 export function updateAlert(
   id: string,
-  patch: Partial<Pick<MarketAlert, "enabled" | "targetValue" | "condition" | "triggeredAt">>
+  patch: Partial<
+    Pick<MarketAlert, "enabled" | "targetValue" | "condition" | "triggeredAt">
+  >
 ): MarketAlert | null {
   const existing = alertStore.get(id);
   if (!existing) return null;
-  const updated: MarketAlert = { ...existing, ...patch };
+
+  const updated: MarketAlert = {
+    ...existing,
+    enabled:
+      typeof patch.enabled === "boolean" ? patch.enabled : existing.enabled,
+    targetValue:
+      typeof patch.targetValue === "number" &&
+      Number.isFinite(patch.targetValue) &&
+      patch.targetValue > 0
+        ? patch.targetValue
+        : existing.targetValue,
+    condition: patch.condition ?? existing.condition,
+    triggeredAt:
+      patch.triggeredAt !== undefined ? patch.triggeredAt : existing.triggeredAt,
+  };
+
   alertStore.set(id, updated);
   return updated;
 }
