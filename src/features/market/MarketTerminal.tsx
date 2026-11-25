@@ -9,7 +9,6 @@ import {
   Compass,
   GitCompare,
   RefreshCw,
-  TrendingUp,
 } from "lucide-react";
 import {
   ComparisonSection,
@@ -19,7 +18,6 @@ import {
   MarketStatus,
   PriceAlerts,
   SearchBar,
-  SensexSection,
   SilverSection,
   TechnicalAnalysis,
   ThemeToggle,
@@ -28,7 +26,6 @@ import {
 import type {
   GoldMarketData,
   MarketStatusInfo,
-  SensexQuote,
   SilverMarketData,
   SpotMarketData,
 } from "@/types/market";
@@ -41,7 +38,6 @@ const TERMINAL_TABS: Array<{
   icon: React.ReactNode;
 }> = [
   { id: "overview", label: "Overview", icon: <Compass className="h-4 w-4" /> },
-  { id: "sensex", label: "BSE SENSEX", icon: <TrendingUp className="h-4 w-4" /> },
   { id: "gold", label: "Gold (24K/22K/18K)", icon: <Coins className="h-4 w-4" /> },
   { id: "silver", label: "Silver", icon: <Activity className="h-4 w-4" /> },
   { id: "comparison", label: "Comparison", icon: <GitCompare className="h-4 w-4" /> },
@@ -51,7 +47,6 @@ const TERMINAL_TABS: Array<{
 
 export interface MarketOverviewPayload {
   marketStatus: MarketStatusInfo;
-  sensex: SensexQuote;
   gold: GoldMarketData;
   silver: SilverMarketData;
   spot: SpotMarketData;
@@ -98,7 +93,7 @@ export function MarketTerminal({ userName, initialOverview }: MarketTerminalProp
     toast({
       type: "info",
       title: "Market Feed Refreshed",
-      description: "Polled latest provider status from server.",
+      description: "Polled latest bullion & spot rates.",
     });
   };
 
@@ -113,13 +108,12 @@ export function MarketTerminal({ userName, initialOverview }: MarketTerminalProp
       <MarketBackground />
 
       <div className="relative z-10 mx-auto flex max-w-[1440px] flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8">
-        {/* Terminal Top Control Bar */}
         <div className="glass-panel flex flex-col gap-4 rounded-2xl p-4 sm:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
                 <h1 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white sm:text-xl">
-                  MARKET INTELLIGENCE TERMINAL
+                  GOLD &amp; SILVER MARKET INTELLIGENCE
                 </h1>
                 <MarketStatus info={marketStatus} />
               </div>
@@ -137,7 +131,7 @@ export function MarketTerminal({ userName, initialOverview }: MarketTerminalProp
               <SearchBar
                 value={searchQuery}
                 onChange={setSearchQuery}
-                placeholder="Filter sections (SENSEX, Gold, Silver...)"
+                placeholder="Filter sections (Gold, Silver, Alerts...)"
                 className="w-full sm:w-60"
               />
               <GlassButton
@@ -157,7 +151,6 @@ export function MarketTerminal({ userName, initialOverview }: MarketTerminalProp
             </div>
           </div>
 
-          {/* Section Navigation */}
           <nav
             aria-label="Market Intelligence sections"
             className="flex flex-wrap items-center gap-1.5 border-t border-slate-200/60 pt-3 dark:border-white/10"
@@ -183,16 +176,13 @@ export function MarketTerminal({ userName, initialOverview }: MarketTerminalProp
           </nav>
         </div>
 
-        {/* Active Section Content */}
         {activeSection === "overview" && (
           <div className="flex flex-col gap-8">
             <MarketOverview />
-            <SensexSection />
             <GoldSection />
             <SilverSection />
           </div>
         )}
-        {activeSection === "sensex" && <SensexSection />}
         {activeSection === "gold" && <GoldSection />}
         {activeSection === "silver" && <SilverSection />}
         {activeSection === "comparison" && <ComparisonSection />}

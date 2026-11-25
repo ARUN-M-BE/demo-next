@@ -5,7 +5,6 @@ import type {
   GoldMarketData,
   MarketAlert,
   MarketStatusInfo,
-  SensexQuote,
   SilverMarketData,
   SpotMarketData,
   Timeframe,
@@ -13,7 +12,6 @@ import type {
 
 export type MarketTerminalSection =
   | "overview"
-  | "sensex"
   | "gold"
   | "silver"
   | "comparison"
@@ -27,7 +25,6 @@ interface MarketState {
   isLoading: boolean;
   lastRefreshIso: string | null;
   marketStatus: MarketStatusInfo | null;
-  sensex: SensexQuote | null;
   gold: GoldMarketData | null;
   silver: SilverMarketData | null;
   spot: SpotMarketData | null;
@@ -38,7 +35,6 @@ interface MarketState {
   setSearchQuery: (q: string) => void;
   hydrateOverview: (data: {
     marketStatus: MarketStatusInfo;
-    sensex: SensexQuote;
     gold: GoldMarketData;
     silver: SilverMarketData;
     spot: SpotMarketData;
@@ -55,14 +51,13 @@ export const useMarketStore = create<MarketState>((set) => ({
   isLoading: true,
   lastRefreshIso: null,
   marketStatus: null,
-  sensex: null,
   gold: null,
   silver: null,
   spot: null,
   alerts: [],
   watchlistAllocation: [
-    { name: "BSE SENSEX", weight: 50, color: "#22D3EE" },
-    { name: "24K Gold", weight: 30, color: "#F59E0B" },
+    { name: "24K Gold", weight: 50, color: "#F59E0B" },
+    { name: "22K Gold", weight: 30, color: "#22D3EE" },
     { name: "Silver", weight: 20, color: "#94A3B8" },
   ],
   setActiveSection: (activeSection) => set({ activeSection }),
@@ -71,7 +66,6 @@ export const useMarketStore = create<MarketState>((set) => ({
   hydrateOverview: (data) =>
     set({
       marketStatus: data.marketStatus,
-      sensex: data.sensex,
       gold: data.gold,
       silver: data.silver,
       spot: data.spot,
@@ -86,7 +80,6 @@ export const useMarketStore = create<MarketState>((set) => ({
       if (!res.ok) throw new Error("Failed to fetch market overview");
       const data = (await res.json()) as {
         marketStatus: MarketStatusInfo;
-        sensex: SensexQuote;
         gold: GoldMarketData;
         silver: SilverMarketData;
         spot: SpotMarketData;
@@ -94,7 +87,6 @@ export const useMarketStore = create<MarketState>((set) => ({
       };
       set({
         marketStatus: data.marketStatus,
-        sensex: data.sensex,
         gold: data.gold,
         silver: data.silver,
         spot: data.spot,

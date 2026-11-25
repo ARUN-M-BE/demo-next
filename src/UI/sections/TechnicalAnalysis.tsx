@@ -87,8 +87,8 @@ export function TechnicalAnalysis() {
             onChange={(e) => setAsset(e.target.value as MarketAssetId)}
             options={[
               { value: "GOLD_24K", label: "24K Gold (IBJA)" },
+              { value: "GOLD_22K", label: "22K Gold (IBJA)" },
               { value: "SILVER", label: "Silver (IBJA)" },
-              { value: "SENSEX", label: "BSE SENSEX" },
             ]}
             containerClassName="w-44"
           />

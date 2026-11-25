@@ -4,7 +4,6 @@ import type {
   Timeframe,
 } from "@/types/market";
 import { fetchIndiaBullionHistory } from "../providers/indiaBullionProvider";
-import { fetchTigzigSensexHistory } from "../providers/tigzigProvider";
 
 function timeframeToDays(tf: Timeframe): number {
   switch (tf) {
@@ -27,27 +26,12 @@ function timeframeToDays(tf: Timeframe): number {
 
 /**
  * Unified historical OHLC provider using free India Bullion (api.dharun.dev)
- * for Gold/Silver and TIGZIG (^BSESN) for BSE SENSEX.
+ * for Indian Gold (24K/22K/18K) and Silver.
  */
 export async function getUnifiedPriceHistory(
   asset: MarketAssetId,
   timeframe: Timeframe
 ): Promise<HistoricalSeriesResponse> {
-  if (asset === "SENSEX") {
-    const { points, error } = await fetchTigzigSensexHistory(timeframe);
-    return {
-      asset,
-      timeframe,
-      interval: "1d",
-      currency: "PTS",
-      points,
-      feedStatus: points.length > 0 ? "DAILY_BENCHMARK" : "ERROR",
-      provider: "TIGZIG (^BSESN)",
-      lastUpdated: points.length > 0 ? new Date().toISOString() : null,
-      message: error,
-    };
-  }
-
   const days = timeframeToDays(timeframe);
   const metal = asset === "SILVER" ? "silver" : "gold";
   const purity =

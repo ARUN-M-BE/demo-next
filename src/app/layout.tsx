@@ -17,9 +17,9 @@ import {
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MARKET INTELLIGENCE — Live SENSEX, Gold & Silver Terminal",
+  title: "MARKET INTELLIGENCE — Live Gold & Silver Terminal",
   description:
-    "Real-time Indian financial market intelligence dashboard for BSE SENSEX, 24K/22K/18K Gold, Silver, technical indicators, and price alerts.",
+    "Indian financial market intelligence dashboard for 24K/22K/18K Gold, Silver, international spot rates, technical indicators, and price alerts.",
 };
 
 const NAV_ITEMS = [

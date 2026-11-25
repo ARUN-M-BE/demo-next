@@ -17,33 +17,15 @@ export type MarketSessionStatus = "MARKET OPEN" | "PRE-OPEN" | "MARKET CLOSED";
 
 export type Timeframe = "1D" | "5D" | "1M" | "3M" | "6M" | "1Y" | "5Y";
 
-export type MarketAssetId = "SENSEX" | "GOLD_24K" | "GOLD_22K" | "GOLD_18K" | "SILVER";
+export type MarketAssetId = "GOLD_24K" | "GOLD_22K" | "GOLD_18K" | "SILVER";
 
 export interface OhlcPoint {
-  time: string; // YYYY-MM-DD or ISO timestamp
+  time: string;
   open: number;
   high: number;
   low: number;
   close: number;
   volume?: number;
-}
-
-export interface SensexQuote {
-  symbol: "BSE_SENSEX";
-  name: "BSE SENSEX";
-  price: number | null;
-  change: number | null;
-  changePercent: number | null;
-  open: number | null;
-  previousClose: number | null;
-  dayHigh: number | null;
-  dayLow: number | null;
-  volume: number | null;
-  timestamp: string | null;
-  feedStatus: FeedStatus;
-  provider: string;
-  message?: string;
-  missingEnv?: string[];
 }
 
 export interface GoldPurityRate {
@@ -97,11 +79,29 @@ export interface SilverMarketData {
   missingEnv?: string[];
 }
 
+export interface SpotMarketData {
+  currency: "INR";
+  unit: "gram";
+  goldSpotPerGram: number | null;
+  goldSpotUsdOz: number | null;
+  silverSpotPerGram: number | null;
+  silverSpotUsdOz: number | null;
+  fxRateUsdInr: number | null;
+  goldSilverRatio: number | null;
+  isStale: boolean;
+  ageSeconds: number | null;
+  timestamp: string | null;
+  feedStatus: FeedStatus;
+  source: string;
+  rateTypeLabel: "International Indicative Spot Rate";
+  message?: string;
+}
+
 export interface HistoricalSeriesResponse {
   asset: MarketAssetId;
   timeframe: Timeframe;
   interval: string;
-  currency: "INR" | "PTS";
+  currency: "INR";
   points: OhlcPoint[];
   feedStatus: FeedStatus;
   provider: string;
@@ -156,22 +156,4 @@ export interface MarketAlert {
   createdAt: string;
   triggeredAt: string | null;
   storageMode: "SERVER_MEMORY" | "BROWSER_LOCAL";
-}
-
-export interface SpotMarketData {
-  currency: "INR";
-  unit: "gram";
-  goldSpotPerGram: number | null;
-  goldSpotUsdOz: number | null;
-  silverSpotPerGram: number | null;
-  silverSpotUsdOz: number | null;
-  fxRateUsdInr: number | null;
-  goldSilverRatio: number | null;
-  isStale: boolean;
-  ageSeconds: number | null;
-  timestamp: string | null;
-  feedStatus: FeedStatus;
-  source: string;
-  rateTypeLabel: "International Indicative Spot Rate";
-  message?: string;
 }

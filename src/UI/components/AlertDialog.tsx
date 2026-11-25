@@ -26,12 +26,7 @@ export function AlertDialog({ open, onClose, onSubmit }: AlertDialogProps) {
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
-  const unit =
-    condition === "PERCENT_CHANGE"
-      ? "%"
-      : asset === "SENSEX"
-      ? "PTS"
-      : "INR/g";
+  const unit = condition === "PERCENT_CHANGE" ? "%" : "INR/g";
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,7 +78,6 @@ export function AlertDialog({ open, onClose, onSubmit }: AlertDialogProps) {
           value={asset}
           onChange={(e) => setAsset(e.target.value as MarketAssetId)}
           options={[
-            { value: "SENSEX", label: "BSE SENSEX (Index)" },
             { value: "GOLD_24K", label: "24K Gold (per gram)" },
             { value: "GOLD_22K", label: "22K Gold (per gram)" },
             { value: "GOLD_18K", label: "18K Gold (per gram)" },
@@ -106,7 +100,7 @@ export function AlertDialog({ open, onClose, onSubmit }: AlertDialogProps) {
           label={`Target Value (${unit})`}
           type="number"
           step="any"
-          placeholder={asset === "SENSEX" ? "e.g. 82500" : "e.g. 15000"}
+          placeholder="e.g. 15000"
           value={targetValue}
           onChange={(e) => {
             setTargetValue(e.target.value);

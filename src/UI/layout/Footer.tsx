@@ -20,8 +20,8 @@ export function Footer({
     >
       <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-4 px-4 py-5 text-xs text-slate-500 dark:text-slate-400 sm:flex-row sm:px-6 lg:px-8">
         <p>
-          &copy; 2026 {brandName}. Sources: IBJA (api.dharun.dev), XAUS Spot
-          (xaus.com), SnapData &amp; TIGZIG (^BSESN).
+          &copy; 2026 {brandName}. Sources: IBJA (api.dharun.dev) &amp; XAUS Spot
+          (xaus.com).
         </p>
         <div className="flex items-center gap-5">
           <Link href="/" className="hover:text-cyan-500">

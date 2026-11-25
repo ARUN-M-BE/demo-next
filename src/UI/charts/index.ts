@@ -5,6 +5,5 @@ export * from "./ComparisonChart";
 export * from "./DonutChart";
 export * from "./GoldChart";
 export * from "./LineChart";
-export * from "./SensexChart";
 export * from "./SilverChart";
 export * from "./VolatilityChart";

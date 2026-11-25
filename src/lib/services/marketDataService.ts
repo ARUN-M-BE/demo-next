@@ -5,19 +5,9 @@ import {
   fetchIndiaGoldBenchmark,
   fetchIndiaSilverBenchmark,
 } from "../providers/indiaBullionProvider";
-import { fetchSnapdataSensex } from "../providers/snapdataProvider";
 import { fetchXausSpotRates } from "../providers/xausProvider";
 import { evaluateDataFreshness } from "./dataFreshnessService";
 import { getUnifiedPriceHistory } from "./priceHistoryService";
-
-/**
- * Resolves BSE SENSEX daily snapshot from free SnapData provider.
- */
-export async function getSensexMarketData() {
-  const quote = await fetchSnapdataSensex();
-  const freshness = evaluateDataFreshness(quote.timestamp, quote.feedStatus);
-  return { quote, freshness };
-}
 
 export async function getGoldBenchmarkData() {
   const gold = await fetchIndiaGoldBenchmark();
@@ -38,8 +28,7 @@ export async function getSpotMarketData() {
 }
 
 export async function getFullMarketOverview() {
-  const [sensexRes, goldRes, silverRes, spotRes] = await Promise.all([
-    getSensexMarketData(),
+  const [goldRes, silverRes, spotRes] = await Promise.all([
     getGoldBenchmarkData(),
     getSilverBenchmarkData(),
     getSpotMarketData(),
@@ -47,7 +36,6 @@ export async function getFullMarketOverview() {
 
   return {
     marketStatus: getIndianMarketStatus(),
-    sensex: sensexRes.quote,
     gold: goldRes.gold,
     silver: silverRes.silver,
     spot: spotRes.spot,

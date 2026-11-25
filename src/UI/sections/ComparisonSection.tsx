@@ -10,8 +10,7 @@ import { TimeframeSelector } from "../components/TimeframeSelector";
 type ComparisonPair =
   | "GOLD24_VS_SILVER"
   | "GOLD22_VS_GOLD24"
-  | "GOLD_VS_SENSEX"
-  | "SILVER_VS_SENSEX";
+  | "GOLD18_VS_GOLD24";
 
 const PAIR_CONFIG: Record<
   ComparisonPair,
@@ -31,19 +30,12 @@ const PAIR_CONFIG: Record<
     b: "GOLD_24K",
     bName: "24K Gold (%)",
   },
-  GOLD_VS_SENSEX: {
-    label: "24K Gold vs BSE SENSEX",
-    a: "GOLD_24K",
-    aName: "24K Gold (%)",
-    b: "SENSEX",
-    bName: "BSE SENSEX (%)",
-  },
-  SILVER_VS_SENSEX: {
-    label: "Silver vs BSE SENSEX",
-    a: "SILVER",
-    aName: "Silver (%)",
-    b: "SENSEX",
-    bName: "BSE SENSEX (%)",
+  GOLD18_VS_GOLD24: {
+    label: "18K Gold vs 24K Gold",
+    a: "GOLD_18K",
+    aName: "18K Gold (%)",
+    b: "GOLD_24K",
+    bName: "24K Gold (%)",
   },
 };
 
@@ -74,7 +66,7 @@ export function ComparisonSection() {
 
         if (ptsA.length === 0 || ptsB.length === 0) {
           setMerged([]);
-          setDisclosure("One or both providers returned insufficient historical points for comparison.");
+          setDisclosure("Insufficient historical points returned for comparison.");
           setLoading(false);
           return;
         }
@@ -95,9 +87,7 @@ export function ComparisonSection() {
 
         setMerged(rows);
         setDisclosure(
-          resA.interval !== resB.interval
-            ? `Note: ${cfg.aName} (${resA.interval}) and ${cfg.bName} (${resB.interval}) use different sampling intervals.`
-            : `Normalized percentage return from start of ${timeframe} window.`
+          `Normalized percentage return from start of ${timeframe} window (IBJA AM/PM daily benchmarks).`
         );
         setLoading(false);
       })
@@ -111,10 +101,10 @@ export function ComparisonSection() {
   }, [cfg.a, cfg.b, cfg.aName, cfg.bName, timeframe]);
 
   return (
-    <section aria-label="Asset Price Comparison Analytics">
+    <section aria-label="Precious Metals Comparison Analytics">
       <ChartCard
-        title="Cross-Asset Normalized Performance"
-        subtitle={disclosure || "Compare normalized percentage returns across Indian benchmarks"}
+        title="Gold & Silver Normalized Performance"
+        subtitle={disclosure || "Compare normalized percentage returns across Indian bullion benchmarks"}
         isLoading={loading}
         isEmpty={!loading && merged.length === 0}
         emptyMessage={disclosure || "No overlapping dates available for this pair."}
