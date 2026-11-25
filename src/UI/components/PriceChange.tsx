@@ -11,9 +11,6 @@ export interface PriceChangeProps {
   className?: string;
 }
 
-/**
- * Displays absolute and percentage price movement in emerald/coral institutional styling.
- */
 export function PriceChange({
   change,
   changePercent,
@@ -59,7 +56,7 @@ export function PriceChange({
         <span>
           {isPositive ? "+" : ""}
           {prefix}
-          {change.toLocaleString("en-US", {
+          {change.toLocaleString("en-IN", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
           })}

@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getMarketOverview } from "@/server/services/marketDataService";
+import { NextResponse } from "next/server";
+import { getFullMarketOverview } from "@/lib/services/marketDataService";
 
-export async function GET(request: NextRequest) {
-  const city = request.nextUrl.searchParams.get("city") ?? undefined;
-  const overview = await getMarketOverview(city);
+export async function GET() {
+  const overview = await getFullMarketOverview();
   return NextResponse.json(overview);
 }

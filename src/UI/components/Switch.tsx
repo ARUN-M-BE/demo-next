@@ -8,67 +8,49 @@ export interface SwitchProps {
   onCheckedChange: (checked: boolean) => void;
   label?: string;
   description?: string;
-  disabled?: boolean;
-  id?: string;
   className?: string;
 }
 
-/**
- * Accessible toggle switch control with smooth thumb transition.
- */
 export function Switch({
   checked,
   onCheckedChange,
   label,
   description,
-  disabled = false,
-  id,
   className,
 }: SwitchProps) {
-  const generatedId = useId();
-  const switchId = id ?? generatedId;
-
+  const id = useId();
   return (
     <div className={cn("flex items-center justify-between gap-3", className)}>
       {(label || description) && (
-        <label
-          htmlFor={switchId}
-          className={cn(
-            "flex flex-col select-none",
-            disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
-          )}
-        >
+        <label htmlFor={id} className="flex flex-col cursor-pointer">
           {label && (
-            <span className="text-sm font-medium text-grayscale-textIcon-title">
+            <span className="text-sm font-medium text-slate-900 dark:text-white">
               {label}
             </span>
           )}
           {description && (
-            <span className="text-xs text-grayscale-textIcon-body">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
               {description}
             </span>
           )}
         </label>
       )}
       <button
-        id={switchId}
+        id={id}
         type="button"
         role="switch"
         aria-checked={checked}
-        disabled={disabled}
         onClick={() => onCheckedChange(!checked)}
         className={cn(
-          "relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition-colors duration-200",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2",
-          "disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
+          "relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition-colors cursor-pointer",
           checked
-            ? "border-primary-border bg-primary-surface"
-            : "border-grayscale-border bg-grayscale-surface"
+            ? "border-cyan-400 bg-cyan-500"
+            : "border-slate-300 bg-slate-200 dark:border-white/15 dark:bg-white/10"
         )}
       >
         <span
           className={cn(
-            "pointer-events-none inline-block h-4 w-4 rounded-full bg-white shadow-elevation-xs transition-transform duration-200",
+            "inline-block h-4 w-4 rounded-full bg-white transition-transform",
             checked ? "translate-x-6" : "translate-x-1"
           )}
         />

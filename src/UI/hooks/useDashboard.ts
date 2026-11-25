@@ -3,25 +3,24 @@
 import { useCallback, useState } from "react";
 
 export type DashboardSection =
-  | "dashboard"
   | "overview"
-  | "analytics"
-  | "traffic"
-  | "audience"
-  | "geography"
-  | "reports"
-  | "settings";
+  | "sensex"
+  | "gold"
+  | "silver"
+  | "comparison"
+  | "indicators"
+  | "alerts";
 
-export function useDashboard(initialSection: DashboardSection = "dashboard") {
+export function useDashboard(initialSection: DashboardSection = "overview") {
   const [activeSection, setActiveSection] =
     useState<DashboardSection>(initialSection);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const toggleSidebar = useCallback(() => {
-    setSidebarCollapsed((prev) => !prev);
-  }, []);
-
+  const toggleSidebar = useCallback(
+    () => setSidebarCollapsed((prev) => !prev),
+    []
+  );
   const openMobileMenu = useCallback(() => setMobileMenuOpen(true), []);
   const closeMobileMenu = useCallback(() => setMobileMenuOpen(false), []);
 

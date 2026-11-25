@@ -16,9 +16,6 @@ export interface LivePriceProps {
   className?: string;
 }
 
-/**
- * Animated financial price display that shows a pulse indicator ONLY when feedStatus === "LIVE".
- */
 export function LivePrice({
   value,
   prefix = "",

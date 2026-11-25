@@ -1,8 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
-import { fetchGoldMarketData } from "@/server/providers/goldProvider";
+import { NextResponse } from "next/server";
+import { getGoldBenchmarkData } from "@/lib/services/marketDataService";
 
-export async function GET(request: NextRequest) {
-  const city = request.nextUrl.searchParams.get("city") ?? undefined;
-  const data = await fetchGoldMarketData(city);
-  return NextResponse.json(data);
+export async function GET() {
+  const result = await getGoldBenchmarkData();
+  return NextResponse.json(result);
 }

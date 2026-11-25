@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Activity, Coins, ShieldAlert, TrendingUp } from "lucide-react";
+import { Activity, Coins, Globe, TrendingUp } from "lucide-react";
 import { useMarketStore } from "@/store/marketStore";
 import { DonutChart } from "../charts/DonutChart";
 import { ChartCard } from "../components/ChartCard";
@@ -9,26 +9,23 @@ import { GlassCard } from "../components/GlassCard";
 import { LivePrice } from "../components/LivePrice";
 import { PriceChange } from "../components/PriceChange";
 
-/**
- * High-level Market Intelligence overview combining SENSEX, 24K Gold, Silver, and Watchlist Distribution.
- */
 export function MarketOverview() {
-  const { sensex, gold, silver, watchlistAllocation } = useMarketStore();
+  const { sensex, gold, silver, spot, watchlistAllocation } = useMarketStore();
   const gold24 = gold?.rates.find((r) => r.purity === "24K");
 
   return (
     <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:col-span-2">
-        <GlassCard hoverable className="flex flex-col justify-between gap-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:col-span-2">
+        <GlassCard hoverable className="flex flex-col justify-between gap-2.5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-cyan-500">
-              BSE SENSEX
+              BSE SENSEX &bull; {sensex?.feedStatus.replace("_", " ") ?? "LOADING"}
             </span>
             <TrendingUp className="h-4 w-4 text-cyan-400" />
           </div>
           <LivePrice
             value={sensex?.price ?? null}
-            feedStatus={sensex?.feedStatus ?? "UNCONFIGURED"}
+            feedStatus={sensex?.feedStatus ?? "STALE"}
             accent="cyan"
             size="md"
           />
@@ -36,19 +33,22 @@ export function MarketOverview() {
             change={sensex?.change ?? null}
             changePercent={sensex?.changePercent ?? null}
           />
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            Source: {sensex?.provider ?? "SnapData"}
+          </p>
         </GlassCard>
 
-        <GlassCard hoverable className="flex flex-col justify-between gap-3 border-amber-400/20">
+        <GlassCard hoverable className="flex flex-col justify-between gap-2.5 border-amber-400/20">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-amber-500">
-              24K Gold / 10g
+              24K Gold (10g) &bull; IBJA Benchmark
             </span>
             <Coins className="h-4 w-4 text-amber-400" />
           </div>
           <LivePrice
             value={gold24?.per10Grams ?? null}
             prefix="₹"
-            feedStatus={gold?.feedStatus ?? "UNCONFIGURED"}
+            feedStatus={gold?.feedStatus ?? "DAILY_BENCHMARK"}
             accent="gold"
             size="md"
           />
@@ -57,19 +57,22 @@ export function MarketOverview() {
             changePercent={gold24?.changePercent ?? null}
             prefix="₹"
           />
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            Source: {gold?.provider ?? "IBJA (api.dharun.dev)"}
+          </p>
         </GlassCard>
 
-        <GlassCard hoverable className="flex flex-col justify-between gap-3">
+        <GlassCard hoverable className="flex flex-col justify-between gap-2.5">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Silver / 1kg
+              Silver (1kg) &bull; IBJA Benchmark
             </span>
             <Activity className="h-4 w-4 text-slate-300" />
           </div>
           <LivePrice
             value={silver?.perKg ?? null}
             prefix="₹"
-            feedStatus={silver?.feedStatus ?? "UNCONFIGURED"}
+            feedStatus={silver?.feedStatus ?? "DAILY_BENCHMARK"}
             accent="silver"
             size="md"
           />
@@ -78,22 +81,44 @@ export function MarketOverview() {
             changePercent={silver?.changePercent ?? null}
             prefix="₹"
           />
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            Source: {silver?.provider ?? "IBJA (api.dharun.dev)"}
+          </p>
         </GlassCard>
 
-        <GlassCard className="sm:col-span-3 flex items-start gap-3 border-cyan-500/20">
-          <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-cyan-400" />
-          <div className="text-xs text-slate-600 dark:text-slate-300">
-            <p className="font-semibold text-slate-900 dark:text-white">
-              Real-Time Provider Integrity
-            </p>
-            <p className="mt-0.5">
-              All quotes reflect server-side provider responses only. When API
-              credentials (<code className="font-mono">SENSEX_API_KEY</code>,{" "}
-              <code className="font-mono">METALS_API_KEY</code>) are not set,
-              the terminal displays unconfigured states instead of fabricated
-              live prices.
-            </p>
+        <GlassCard hoverable className="flex flex-col justify-between gap-2.5 border-cyan-500/20">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
+              International Spot (INR/g)
+            </span>
+            <Globe className="h-4 w-4 text-cyan-400" />
           </div>
+          <div className="flex items-baseline justify-between gap-3">
+            <div>
+              <p className="text-[10px] uppercase text-slate-400">Gold Spot</p>
+              <LivePrice
+                value={spot?.goldSpotPerGram ?? null}
+                prefix="₹"
+                feedStatus={spot?.feedStatus ?? "DELAYED"}
+                accent="gold"
+                size="md"
+              />
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] uppercase text-slate-400">Silver Spot</p>
+              <LivePrice
+                value={spot?.silverSpotPerGram ?? null}
+                prefix="₹"
+                feedStatus={spot?.feedStatus ?? "DELAYED"}
+                accent="silver"
+                size="md"
+              />
+            </div>
+          </div>
+          <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            {spot?.rateTypeLabel ?? "International Indicative Spot Rate"} &bull;{" "}
+            {spot?.source ?? "XAUS"}
+          </p>
         </GlassCard>
       </div>
 

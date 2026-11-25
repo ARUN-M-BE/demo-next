@@ -157,3 +157,21 @@ export interface MarketAlert {
   triggeredAt: string | null;
   storageMode: "SERVER_MEMORY" | "BROWSER_LOCAL";
 }
+
+export interface SpotMarketData {
+  currency: "INR";
+  unit: "gram";
+  goldSpotPerGram: number | null;
+  goldSpotUsdOz: number | null;
+  silverSpotPerGram: number | null;
+  silverSpotUsdOz: number | null;
+  fxRateUsdInr: number | null;
+  goldSilverRatio: number | null;
+  isStale: boolean;
+  ageSeconds: number | null;
+  timestamp: string | null;
+  feedStatus: FeedStatus;
+  source: string;
+  rateTypeLabel: "International Indicative Spot Rate";
+  message?: string;
+}

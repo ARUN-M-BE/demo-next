@@ -25,6 +25,13 @@ import {
   ThemeToggle,
   useToast,
 } from "@/UI";
+import type {
+  GoldMarketData,
+  MarketStatusInfo,
+  SensexQuote,
+  SilverMarketData,
+  SpotMarketData,
+} from "@/types/market";
 import { useMarketStore, type MarketTerminalSection } from "@/store/marketStore";
 import { MarketBackground } from "./MarketBackground";
 
@@ -42,11 +49,21 @@ const TERMINAL_TABS: Array<{
   { id: "alerts", label: "Price Alerts", icon: <Bell className="h-4 w-4" /> },
 ];
 
-export interface MarketTerminalProps {
-  userName?: string | null;
+export interface MarketOverviewPayload {
+  marketStatus: MarketStatusInfo;
+  sensex: SensexQuote;
+  gold: GoldMarketData;
+  silver: SilverMarketData;
+  spot: SpotMarketData;
+  serverTimestamp: string;
 }
 
-export function MarketTerminal({ userName }: MarketTerminalProps) {
+export interface MarketTerminalProps {
+  userName?: string | null;
+  initialOverview?: MarketOverviewPayload;
+}
+
+export function MarketTerminal({ userName, initialOverview }: MarketTerminalProps) {
   const {
     activeSection,
     setActiveSection,
@@ -55,6 +72,7 @@ export function MarketTerminal({ userName }: MarketTerminalProps) {
     marketStatus,
     isLoading,
     lastRefreshIso,
+    hydrateOverview,
     fetchOverview,
   } = useMarketStore();
 
@@ -62,12 +80,16 @@ export function MarketTerminal({ userName }: MarketTerminalProps) {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    void fetchOverview();
+    if (initialOverview) {
+      hydrateOverview(initialOverview);
+    } else {
+      void fetchOverview();
+    }
     const timer = setInterval(() => {
       void fetchOverview();
     }, 30000);
     return () => clearInterval(timer);
-  }, [fetchOverview]);
+  }, [initialOverview, hydrateOverview, fetchOverview]);
 
   const handleManualRefresh = async () => {
     setRefreshing(true);

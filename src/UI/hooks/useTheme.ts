@@ -3,9 +3,6 @@
 import { useContext } from "react";
 import { ThemeContext, type ThemeContextValue } from "../theme/ThemeProvider";
 
-/**
- * Accesses the current UI Astra theme state and setter.
- */
 export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
   if (!context) {

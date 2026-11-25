@@ -15,13 +15,7 @@ export interface CandlestickChartProps {
   height?: number;
 }
 
-/**
- * Interactive TradingView Lightweight Charts candlestick visualization with crosshair, zoom, and pan.
- */
-export function CandlestickChart({
-  points,
-  height = 320,
-}: CandlestickChartProps) {
+export function CandlestickChart({ points, height = 310 }: CandlestickChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,15 +32,9 @@ export function CandlestickChart({
         vertLines: { color: "rgba(148, 163, 184, 0.12)" },
         horzLines: { color: "rgba(148, 163, 184, 0.12)" },
       },
-      crosshair: {
-        mode: 1,
-      },
-      timeScale: {
-        borderColor: "rgba(148, 163, 184, 0.2)",
-      },
-      rightPriceScale: {
-        borderColor: "rgba(148, 163, 184, 0.2)",
-      },
+      crosshair: { mode: 1 },
+      timeScale: { borderColor: "rgba(148, 163, 184, 0.2)" },
+      rightPriceScale: { borderColor: "rgba(148, 163, 184, 0.2)" },
     });
 
     const series = chart.addSeries(CandlestickSeries, {
@@ -68,22 +56,19 @@ export function CandlestickChart({
     series.setData(formatted);
     chart.timeScale().fitContent();
 
-    const resizeObserver = new ResizeObserver((entries) => {
+    const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         chart.applyOptions({ width: entry.contentRect.width });
       }
     });
-    resizeObserver.observe(el);
+    observer.observe(el);
 
     return () => {
-      resizeObserver.disconnect();
+      observer.disconnect();
       chart.remove();
     };
   }, [points, height]);
 
-  if (points.length === 0) {
-    return null;
-  }
-
+  if (points.length === 0) return null;
   return <div ref={containerRef} className="w-full" style={{ height }} />;
 }

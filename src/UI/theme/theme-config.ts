@@ -7,7 +7,7 @@ export interface ThemeConfig {
 }
 
 export const themeConfig: ThemeConfig = {
-  defaultTheme: "system",
+  defaultTheme: "dark",
   storageKey: "uiastra-theme",
   attribute: "class",
 };

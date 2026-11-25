@@ -48,11 +48,11 @@ const PAIR_CONFIG: Record<
 };
 
 export function ComparisonSection() {
-  const [pair, setPair] = useState<ComparisonPair>("GOLD_VS_SENSEX");
-  const [timeframe, setTimeframe] = useState<Timeframe>("3M");
+  const [pair, setPair] = useState<ComparisonPair>("GOLD24_VS_SILVER");
+  const [timeframe, setTimeframe] = useState<Timeframe>("1M");
   const [loading, setLoading] = useState(true);
   const [merged, setMerged] = useState<Array<Record<string, string | number>>>([]);
-  const [disclosure, setDisclosure] = useState<string>("");
+  const [disclosure, setDisclosure] = useState("");
 
   const cfg = PAIR_CONFIG[pair];
 
@@ -74,9 +74,7 @@ export function ComparisonSection() {
 
         if (ptsA.length === 0 || ptsB.length === 0) {
           setMerged([]);
-          setDisclosure(
-            "Configure both SENSEX_API_KEY and METALS_API_KEY to compare normalized historical returns."
-          );
+          setDisclosure("One or both providers returned insufficient historical points for comparison.");
           setLoading(false);
           return;
         }
@@ -116,13 +114,10 @@ export function ComparisonSection() {
     <section aria-label="Asset Price Comparison Analytics">
       <ChartCard
         title="Cross-Asset Normalized Performance"
-        subtitle={disclosure || "Compare normalized percentage returns across Indian equities and precious metals"}
+        subtitle={disclosure || "Compare normalized percentage returns across Indian benchmarks"}
         isLoading={loading}
         isEmpty={!loading && merged.length === 0}
-        emptyMessage={
-          disclosure ||
-          "Insufficient overlapping historical points for the selected pair."
-        }
+        emptyMessage={disclosure || "No overlapping dates available for this pair."}
         action={
           <div className="flex flex-wrap items-center gap-2">
             <Select

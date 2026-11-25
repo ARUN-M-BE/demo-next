@@ -3,7 +3,7 @@
 import React, { Suspense, useState } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Activity, Menu, X } from "lucide-react";
 import { cn } from "../utils/cn";
 import { ThemeToggle } from "../theme/ThemeToggle";
 import { Navigation, type NavItem } from "./Navigation";
@@ -15,11 +15,8 @@ export interface HeaderProps {
   className?: string;
 }
 
-/**
- * Responsive top application header with mobile drawer, theme toggle, and auth slot.
- */
 export function Header({
-  brandName = "AstraStudio",
+  brandName = "MARKET INTELLIGENCE",
   navItems = [],
   authSlot,
   className,
@@ -29,20 +26,20 @@ export function Header({
   return (
     <header
       className={cn(
-        "sticky top-0 z-40 w-full border-b border-grayscale-border bg-background/85 backdrop-blur-md",
+        "sticky top-0 z-40 w-full border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-white/10 dark:bg-[#07111F]/85",
         className
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-6">
           <Link
             href="/"
-            className="inline-flex items-center gap-2.5 font-semibold text-grayscale-textIcon-title focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 rounded-lg"
+            className="inline-flex items-center gap-2.5 font-bold tracking-tight text-slate-900 dark:text-white"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-surface text-neutral-1150 shadow-elevation-xs">
-              <Sparkles className="h-4 w-4" />
+            <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 text-slate-950 shadow-elevation-xs">
+              <Activity className="h-4 w-4" />
             </span>
-            <span className="text-base tracking-tight">{brandName}</span>
+            <span className="text-sm sm:text-base">{brandName}</span>
           </Link>
 
           {navItems.length > 0 && (
@@ -55,21 +52,18 @@ export function Header({
         </div>
 
         <div className="flex items-center gap-2.5">
-          <ThemeToggle />
-          {authSlot && <div className="hidden sm:flex items-center gap-2">{authSlot}</div>}
+          <ThemeToggle size="sm" />
+          {authSlot && (
+            <div className="hidden sm:flex items-center gap-2">{authSlot}</div>
+          )}
 
           <button
             type="button"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            aria-expanded={mobileOpen}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-grayscale-border bg-grayscale-surface-subtle text-grayscale-textIcon-title md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200/80 bg-white/70 text-slate-800 md:hidden dark:border-white/10 dark:bg-white/5 dark:text-white"
           >
-            {mobileOpen ? (
-              <X className="h-4 w-4" />
-            ) : (
-              <Menu className="h-4 w-4" />
-            )}
+            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
@@ -80,8 +74,7 @@ export function Header({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="overflow-hidden border-t border-grayscale-border bg-background md:hidden"
+            className="overflow-hidden border-t border-slate-200/70 bg-white/95 md:hidden dark:border-white/10 dark:bg-[#07111F]"
           >
             <div className="flex flex-col gap-3 px-4 py-4">
               {navItems.length > 0 && (
@@ -94,7 +87,7 @@ export function Header({
                 </Suspense>
               )}
               {authSlot && (
-                <div className="flex items-center gap-2 border-t border-grayscale-border pt-3 sm:hidden">
+                <div className="flex items-center gap-2 border-t border-white/10 pt-3 sm:hidden">
                   {authSlot}
                 </div>
               )}

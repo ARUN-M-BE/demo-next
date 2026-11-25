@@ -26,50 +26,22 @@ export interface AreaChartProps {
   height?: number;
 }
 
-export function AreaChart({
-  data,
-  xKey,
-  series,
-  height = 290,
-}: AreaChartProps) {
+export function AreaChart({ data, xKey, series, height = 270 }: AreaChartProps) {
   return (
     <div style={{ width: "100%", height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <RechartsAreaChart
-          data={data}
-          margin={{ top: 10, right: 12, left: -12, bottom: 0 }}
-        >
+        <RechartsAreaChart data={data} margin={{ top: 10, right: 12, left: -12, bottom: 0 }}>
           <defs>
             {series.map((s) => (
-              <linearGradient
-                key={s.key}
-                id={`area-grad-${s.key}`}
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop offset="5%" stopColor={s.color} stopOpacity={0.42} />
+              <linearGradient key={s.key} id={`grad-${s.key}`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor={s.color} stopOpacity={0.4} />
                 <stop offset="95%" stopColor={s.color} stopOpacity={0.02} />
               </linearGradient>
             ))}
           </defs>
-          <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="rgba(148, 163, 184, 0.16)"
-            vertical={false}
-          />
-          <XAxis
-            dataKey={xKey}
-            tick={{ fontSize: 11, fill: "#94A3B8" }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            tick={{ fontSize: 11, fill: "#94A3B8" }}
-            axisLine={false}
-            tickLine={false}
-          />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.16)" vertical={false} />
+          <XAxis dataKey={xKey} tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} />
+          <YAxis tick={{ fontSize: 11, fill: "#94A3B8" }} axisLine={false} tickLine={false} domain={["auto", "auto"]} />
           <Tooltip content={<CustomTooltip />} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           {series.map((s) => (
@@ -80,8 +52,7 @@ export function AreaChart({
               name={s.name}
               stroke={s.color}
               strokeWidth={2.2}
-              fillOpacity={1}
-              fill={`url(#area-grad-${s.key})`}
+              fill={`url(#grad-${s.key})`}
             />
           ))}
         </RechartsAreaChart>

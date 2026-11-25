@@ -119,3 +119,4 @@ export function AlertDialog({ open, onClose, onSubmit }: AlertDialogProps) {
     </Modal>
   );
 }
+

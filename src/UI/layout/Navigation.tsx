@@ -8,7 +8,6 @@ import { cn } from "../utils/cn";
 export interface NavItem {
   label: string;
   href: string;
-  icon?: React.ReactNode;
 }
 
 export interface NavigationProps {
@@ -18,9 +17,6 @@ export interface NavigationProps {
   className?: string;
 }
 
-/**
- * Responsive navigation link list with active route highlighting.
- */
 export function Navigation({
   items,
   orientation = "horizontal",
@@ -42,9 +38,7 @@ export function Navigation({
     >
       {items.map((item) => {
         const isActive =
-          item.href === "/"
-            ? pathname === "/"
-            : pathname.startsWith(item.href);
+          item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
         return (
           <Link
@@ -52,15 +46,13 @@ export function Navigation({
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              "inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500",
+              "inline-flex items-center rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors",
               isActive
-                ? "bg-primary-surface-subtle text-primary-700 dark:bg-primary-950/60 dark:text-primary-300"
-                : "text-grayscale-textIcon-subtitle hover:bg-grayscale-surface-hover hover:text-grayscale-textIcon-title"
+                ? "bg-cyan-500/15 text-cyan-600 dark:text-cyan-300"
+                : "text-slate-600 hover:bg-white/10 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
             )}
           >
-            {item.icon && <span className="shrink-0">{item.icon}</span>}
-            <span>{item.label}</span>
+            {item.label}
           </Link>
         );
       })}

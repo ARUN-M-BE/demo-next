@@ -7,38 +7,17 @@ import { cn } from "../utils/cn";
 export interface SelectOption {
   value: string;
   label: string;
-  disabled?: boolean;
 }
 
 export interface SelectProps
   extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
-  error?: string;
-  helperText?: string;
   options: SelectOption[];
-  placeholder?: string;
   containerClassName?: string;
 }
 
-/**
- * Styled native select control with label, placeholder, and validation error support.
- */
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  (
-    {
-      className,
-      containerClassName,
-      label,
-      error,
-      helperText,
-      options,
-      placeholder,
-      id,
-      required,
-      ...props
-    },
-    ref
-  ) => {
+  ({ className, containerClassName, label, options, id, ...props }, ref) => {
     const generatedId = useId();
     const selectId = id ?? generatedId;
 
@@ -47,57 +26,34 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         {label && (
           <label
             htmlFor={selectId}
-            className="text-sm font-medium text-grayscale-textIcon-title"
+            className="text-xs font-semibold text-slate-700 dark:text-slate-200"
           >
             {label}
-            {required && (
-              <span className="ml-1 text-error-surface" aria-hidden="true">
-                *
-              </span>
-            )}
           </label>
         )}
         <div className="relative">
           <select
             ref={ref}
             id={selectId}
-            required={required}
-            aria-invalid={Boolean(error) || undefined}
             className={cn(
-              "flex h-10 w-full appearance-none rounded-lg border bg-grayscale-surface-subtle px-3 pr-9 text-sm text-grayscale-textIcon-title",
-              "transition-colors duration-150",
-              "focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-border",
-              "disabled:cursor-not-allowed disabled:opacity-50",
-              error
-                ? "border-error-border-hover"
-                : "border-grayscale-border hover:border-grayscale-border-hover",
+              "h-9 w-full appearance-none rounded-xl border border-slate-200/80 bg-white/70 px-3 pr-8 text-xs font-medium text-slate-900",
+              "dark:border-white/10 dark:bg-[#0B1728] dark:text-white",
+              "focus:border-cyan-400/60 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 cursor-pointer",
               className
             )}
             {...props}
           >
-            {placeholder && (
-              <option value="" disabled>
-                {placeholder}
-              </option>
-            )}
             {options.map((opt) => (
-              <option key={opt.value} value={opt.value} disabled={opt.disabled}>
+              <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
             ))}
           </select>
           <ChevronDown
-            className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-grayscale-textIcon-caption"
+            className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400"
             aria-hidden="true"
           />
         </div>
-        {error ? (
-          <p role="alert" className="text-xs text-error-textIcon-link-label">
-            {error}
-          </p>
-        ) : helperText ? (
-          <p className="text-xs text-grayscale-textIcon-caption">{helperText}</p>
-        ) : null}
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { fetchHistoricalSeries } from "@/server/providers/historicalDataProvider";
+import { getUnifiedPriceHistory } from "@/lib/services/priceHistoryService";
 import type { MarketAssetId, Timeframe } from "@/types/market";
 
 const VALID_ASSETS = new Set<MarketAssetId>([
@@ -22,11 +22,10 @@ const VALID_TIMEFRAMES = new Set<Timeframe>([
 export async function GET(request: NextRequest) {
   const assetParam = (request.nextUrl.searchParams.get("asset") ?? "SENSEX") as MarketAssetId;
   const tfParam = (request.nextUrl.searchParams.get("timeframe") ?? "1M") as Timeframe;
-  const city = request.nextUrl.searchParams.get("city") ?? undefined;
 
   const asset = VALID_ASSETS.has(assetParam) ? assetParam : "SENSEX";
   const timeframe = VALID_TIMEFRAMES.has(tfParam) ? tfParam : "1M";
 
-  const data = await fetchHistoricalSeries(asset, timeframe, city);
+  const data = await getUnifiedPriceHistory(asset, timeframe);
   return NextResponse.json(data);
 }

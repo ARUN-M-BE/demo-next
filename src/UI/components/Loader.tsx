@@ -8,28 +8,18 @@ export interface LoaderProps {
   className?: string;
 }
 
-const sizeClasses: Record<NonNullable<LoaderProps["size"]>, string> = {
-  sm: "h-4 w-4",
-  md: "h-6 w-6",
-  lg: "h-9 w-9",
-};
-
 export function Loader({ size = "md", label, className }: LoaderProps) {
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      className={cn("inline-flex items-center gap-2", className)}
-    >
+    <div role="status" className={cn("inline-flex items-center gap-2", className)}>
       <Loader2
-        className={cn("animate-spin text-primary-surface", sizeClasses[size])}
-        aria-hidden="true"
+        className={cn(
+          "animate-spin text-cyan-400",
+          size === "sm" && "h-4 w-4",
+          size === "md" && "h-6 w-6",
+          size === "lg" && "h-8 w-8"
+        )}
       />
-      {label ? (
-        <span className="text-sm text-grayscale-textIcon-body">{label}</span>
-      ) : (
-        <span className="sr-only">Loading...</span>
-      )}
+      {label && <span className="text-sm text-slate-400">{label}</span>}
     </div>
   );
 }

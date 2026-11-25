@@ -4,23 +4,13 @@ import React from "react";
 import type { OhlcPoint } from "@/types/market";
 import { AreaChart } from "./AreaChart";
 
-export interface GoldChartProps {
-  points: OhlcPoint[];
-  height?: number;
-}
-
-export function GoldChart({ points, height = 250 }: GoldChartProps) {
-  const data = points.map((p) => ({
-    time: p.time,
-    close: p.close,
-  }));
-
+export function GoldChart({ points, height = 250 }: { points: OhlcPoint[]; height?: number }) {
   return (
     <AreaChart
-      data={data}
+      data={points.map((p) => ({ time: p.time, close: p.close }))}
       xKey="time"
       height={height}
-      series={[{ key: "close", name: "24K Gold (INR)", color: "#F59E0B" }]}
+      series={[{ key: "close", name: "IBJA Gold (INR/g)", color: "#F59E0B" }]}
     />
   );
 }

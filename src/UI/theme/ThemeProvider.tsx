@@ -21,7 +21,7 @@ export interface ThemeProviderProps {
 }
 
 function getSystemTheme(): "light" | "dark" {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "dark";
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
@@ -33,13 +33,11 @@ export function ThemeProvider({
   storageKey = themeConfig.storageKey,
 }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(defaultTheme);
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("light");
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
 
   const applyTheme = useCallback((nextTheme: Theme) => {
     const root = document.documentElement;
-    const effective =
-      nextTheme === "system" ? getSystemTheme() : nextTheme;
-
+    const effective = nextTheme === "system" ? getSystemTheme() : nextTheme;
     root.classList.remove("light", "dark");
     root.classList.add(effective);
     root.style.colorScheme = effective;
@@ -60,14 +58,6 @@ export function ThemeProvider({
     }
   }, [applyTheme, defaultTheme, storageKey]);
 
-  useEffect(() => {
-    if (theme !== "system") return;
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => applyTheme("system");
-    media.addEventListener("change", handleChange);
-    return () => media.removeEventListener("change", handleChange);
-  }, [theme, applyTheme]);
-
   const setTheme = useCallback(
     (nextTheme: Theme) => {
       setThemeState(nextTheme);
@@ -75,7 +65,7 @@ export function ThemeProvider({
       try {
         localStorage.setItem(storageKey, nextTheme);
       } catch {
-        // Ignore storage errors in restricted environments
+        // Ignore storage errors
       }
     },
     [applyTheme, storageKey]

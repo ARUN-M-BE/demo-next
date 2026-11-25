@@ -16,9 +16,6 @@ const paddingClasses = {
   lg: "p-6 sm:p-8",
 };
 
-/**
- * Glassmorphism card container with backdrop blur, inner highlight, and optional hover elevation.
- */
 export function GlassCard({
   children,
   className,

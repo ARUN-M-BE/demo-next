@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { fetchSensexQuote } from "@/server/providers/sensexProvider";
+import { getSensexMarketData } from "@/lib/services/marketDataService";
 import { getIndianMarketStatus } from "@/server/services/marketCalendarService";
 
 export async function GET() {
-  const [quote, marketStatus] = await Promise.all([
-    fetchSensexQuote(),
+  const [{ quote, freshness }, marketStatus] = await Promise.all([
+    getSensexMarketData(),
     Promise.resolve(getIndianMarketStatus()),
   ]);
-  return NextResponse.json({ quote, marketStatus });
+  return NextResponse.json({ quote, freshness, marketStatus });
 }

@@ -42,11 +42,11 @@ export function SensexSection() {
   }, [timeframe]);
 
   const points = history?.points ?? [];
-  const feedStatus = sensex?.feedStatus ?? "UNCONFIGURED";
+  const feedStatus = sensex?.feedStatus ?? "STALE";
 
   return (
-    <section aria-label="BSE SENSEX Live Analytics" className="flex flex-col gap-6">
-      <GlassCard className="flex flex-col gap-6">
+    <section aria-label="BSE SENSEX Analytics" className="flex flex-col gap-6">
+      <GlassCard className="flex flex-col gap-5">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5">
@@ -70,11 +70,12 @@ export function SensexSection() {
               />
             </div>
             <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
+              Source: {sensex?.provider ?? "SnapData Daily Snapshot"}
               {sensex?.timestamp
-                ? `Last update: ${new Date(sensex.timestamp).toLocaleString("en-IN", {
+                ? ` • Updated: ${new Date(sensex.timestamp).toLocaleString("en-IN", {
                     timeZone: "Asia/Kolkata",
-                  })} IST • Provider: ${sensex.provider}`
-                : sensex?.message ?? "Awaiting BSE SENSEX provider credentials."}
+                  })} IST`
+                : ""}
             </p>
           </div>
 
@@ -102,30 +103,22 @@ export function SensexSection() {
           </div>
         </div>
 
-        {sensex?.feedStatus === "UNCONFIGURED" && (
-          <div className="flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3.5 text-xs text-amber-700 dark:text-amber-300">
+        {sensex?.message && (
+          <div className="flex items-start gap-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-300">
             <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
-            <div>
-              <p className="font-semibold">SENSEX Feed Unconfigured</p>
-              <p className="mt-0.5">
-                Add <code className="font-mono">SENSEX_API_KEY</code> and{" "}
-                <code className="font-mono">SENSEX_API_BASE_URL</code> to{" "}
-                <code className="font-mono">.env.local</code> to load real-time
-                quotes and OHLC candles.
-              </p>
-            </div>
+            <p>{sensex.message}</p>
           </div>
         )}
       </GlassCard>
 
       <ChartCard
-        title="BSE SENSEX Price & OHLC Chart"
-        subtitle={`Timeframe: ${timeframe} • Interval: ${history?.interval ?? "1d"}`}
+        title="BSE SENSEX Historical Chart"
+        subtitle={`Source: ${history?.provider ?? "TIGZIG (^BSESN)"} • Timeframe: ${timeframe}`}
         isLoading={loadingHistory}
         isEmpty={!loadingHistory && points.length === 0}
         emptyMessage={
           history?.message ??
-          "No historical OHLC data available. Configure SENSEX_API_KEY to render live candles."
+          "Historical ^BSESN candles unavailable from provider."
         }
         action={
           <div className="flex flex-wrap items-center gap-2">

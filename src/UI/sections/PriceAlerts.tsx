@@ -14,7 +14,7 @@ export function PriceAlerts() {
   const { alerts, fetchAlerts } = useMarketStore();
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [notifPerm, setNotifPerm] = useState<string>("default");
+  const [notifPerm, setNotifPerm] = useState("default");
 
   useEffect(() => {
     void fetchAlerts();
@@ -24,14 +24,7 @@ export function PriceAlerts() {
   }, [fetchAlerts]);
 
   const requestNotificationPermission = async () => {
-    if (typeof window === "undefined" || !("Notification" in window)) {
-      toast({
-        type: "warning",
-        title: "Not supported",
-        description: "Browser notifications are unavailable in this environment.",
-      });
-      return;
-    }
+    if (typeof window === "undefined" || !("Notification" in window)) return;
     const perm = await Notification.requestPermission();
     setNotifPerm(perm);
     toast({
@@ -39,7 +32,7 @@ export function PriceAlerts() {
       title: `Notifications ${perm}`,
       description:
         perm === "granted"
-          ? "Browser-local price alerts will notify you when triggered."
+          ? "Browser-local price alerts enabled."
           : "Permission was not granted.",
     });
   };
@@ -77,11 +70,7 @@ export function PriceAlerts() {
   const handleDelete = async (id: string) => {
     await fetch(`/api/alerts/${id}`, { method: "DELETE" });
     await fetchAlerts();
-    toast({
-      type: "info",
-      title: "Alert Deleted",
-      description: "Removed price alert.",
-    });
+    toast({ type: "info", title: "Alert Deleted" });
   };
 
   return (
@@ -92,7 +81,7 @@ export function PriceAlerts() {
             Price Alert Rules
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Browser-local &amp; server-memory alerts. Evaluated when live provider quotes update.
+            Browser-local &amp; server-memory alerts evaluated against incoming quotes.
           </p>
         </div>
 
@@ -122,27 +111,20 @@ export function PriceAlerts() {
             No active price alerts configured
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400">
-            Example: Notify when 24K Gold exceeds ₹15,000 per gram or SENSEX crosses a target level.
+            Example: Notify when 24K Gold exceeds ₹15,000 per gram.
           </p>
         </GlassCard>
       ) : (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {alerts.map((alert) => (
-            <GlassCard
-              key={alert.id}
-              padding="sm"
-              className="flex items-center justify-between gap-4"
-            >
+            <GlassCard key={alert.id} padding="sm" className="flex items-center justify-between gap-4">
               <div>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">
                   {alert.asset} &bull; {alert.condition}{" "}
                   {alert.targetValue.toLocaleString("en-IN")} {alert.unit}
                 </p>
                 <p className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">
-                  Created {new Date(alert.createdAt).toLocaleString("en-IN")} &bull;{" "}
-                  {alert.triggeredAt
-                    ? `Triggered: ${new Date(alert.triggeredAt).toLocaleString("en-IN")}`
-                    : "Browser-local alert"}
+                  Created {new Date(alert.createdAt).toLocaleString("en-IN")}
                 </p>
               </div>
               <div className="flex items-center gap-3">

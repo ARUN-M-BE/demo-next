@@ -9,19 +9,14 @@ export interface AnimatedCounterProps {
   prefix?: string;
   suffix?: string;
   decimals?: number;
-  compact?: boolean;
 }
 
-/**
- * Smoothly animates numeric values with reduced-motion support.
- */
 export function AnimatedCounter({
   value,
-  duration = 700,
+  duration = 650,
   prefix = "",
   suffix = "",
-  decimals = 0,
-  compact = false,
+  decimals = 2,
 }: AnimatedCounterProps) {
   const prefersReducedMotion = useReducedMotion();
   const [displayValue, setDisplayValue] = useState(value);
@@ -37,13 +32,10 @@ export function AnimatedCounter({
     const startTime = performance.now();
 
     const tick = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(1, elapsed / duration);
+      const progress = Math.min(1, (now - startTime) / duration);
       const eased = 1 - Math.pow(1 - progress, 3);
       setDisplayValue(startValue + (value - startValue) * eased);
-      if (progress < 1) {
-        rafId = requestAnimationFrame(tick);
-      }
+      if (progress < 1) rafId = requestAnimationFrame(tick);
     };
 
     rafId = requestAnimationFrame(tick);
@@ -51,21 +43,13 @@ export function AnimatedCounter({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration, prefersReducedMotion]);
 
-  const formatted = compact
-    ? displayValue >= 1_000_000
-      ? `${(displayValue / 1_000_000).toFixed(2)}M`
-      : displayValue >= 1_000
-      ? `${(displayValue / 1_000).toFixed(1)}K`
-      : displayValue.toFixed(decimals)
-    : displayValue.toLocaleString("en-US", {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-      });
-
   return (
     <span className="tabular-nums">
       {prefix}
-      {formatted}
+      {displayValue.toLocaleString("en-IN", {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      })}
       {suffix}
     </span>
   );

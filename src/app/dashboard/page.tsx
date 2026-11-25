@@ -1,23 +1,37 @@
 import { Suspense } from "react";
 import { currentUser } from "@clerk/nextjs/server";
 import { Loader } from "@/UI";
+import { getFullMarketOverview } from "@/lib/services/marketDataService";
 import { MarketTerminal } from "@/features/market/MarketTerminal";
 
 async function TerminalWithUser() {
-  let userName: string | null = null;
-  try {
-    const user = await currentUser();
-    if (user) {
-      userName =
-        [user.firstName, user.lastName].filter(Boolean).join(" ") ||
-        user.username ||
-        "Authenticated Analyst";
-    }
-  } catch {
-    // Graceful fallback when Clerk keys are not yet linked
-  }
+  const hasClerkKey = Boolean(
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()
+  );
 
-  return <MarketTerminal userName={userName} />;
+  const [initialOverview, userName] = await Promise.all([
+    getFullMarketOverview(),
+    (async () => {
+      if (!hasClerkKey) return null;
+      try {
+        const user = await currentUser();
+        if (user) {
+          return (
+            [user.firstName, user.lastName].filter(Boolean).join(" ") ||
+            user.username ||
+            "Authenticated Analyst"
+          );
+        }
+      } catch {
+        return null;
+      }
+      return null;
+    })(),
+  ]);
+
+  return (
+    <MarketTerminal userName={userName} initialOverview={initialOverview} />
+  );
 }
 
 export default function DashboardPage() {

@@ -14,7 +14,7 @@ import { Select } from "../components/Select";
 import { TimeframeSelector } from "../components/TimeframeSelector";
 
 export function TechnicalAnalysis() {
-  const [asset, setAsset] = useState<MarketAssetId>("SENSEX");
+  const [asset, setAsset] = useState<MarketAssetId>("GOLD_24K");
   const [timeframe, setTimeframe] = useState<Timeframe>("3M");
   const [data, setData] = useState<TechnicalIndicatorsResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -76,8 +76,7 @@ export function TechnicalAnalysis() {
           <p className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
             <Info className="h-3.5 w-3.5 text-cyan-500" />
             <span>
-              Analytical indicators computed from historical OHLC data — not
-              financial advice.
+              Analytical indicators computed from historical OHLC data — not financial advice.
             </span>
           </p>
         </div>
@@ -87,11 +86,11 @@ export function TechnicalAnalysis() {
             value={asset}
             onChange={(e) => setAsset(e.target.value as MarketAssetId)}
             options={[
+              { value: "GOLD_24K", label: "24K Gold (IBJA)" },
+              { value: "SILVER", label: "Silver (IBJA)" },
               { value: "SENSEX", label: "BSE SENSEX" },
-              { value: "GOLD_24K", label: "24K Gold" },
-              { value: "SILVER", label: "Silver" },
             ]}
-            containerClassName="w-40"
+            containerClassName="w-44"
           />
           <TimeframeSelector value={timeframe} onChange={setTimeframe} />
         </div>

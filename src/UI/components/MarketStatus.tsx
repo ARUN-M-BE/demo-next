@@ -10,12 +10,8 @@ export interface MarketStatusProps {
   className?: string;
 }
 
-/**
- * Displays Indian exchange session state (MARKET OPEN, PRE-OPEN, MARKET CLOSED) and IST clock.
- */
 export function MarketStatus({ info, className }: MarketStatusProps) {
   const status = info?.status ?? "MARKET CLOSED";
-
   const badgeStyle =
     status === "MARKET OPEN"
       ? "border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-300"

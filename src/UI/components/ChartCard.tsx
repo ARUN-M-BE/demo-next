@@ -3,7 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { BarChart3 } from "lucide-react";
-import { cn } from "../utils/cn";
 import { GlassCard } from "./GlassCard";
 import { Skeleton } from "./Skeleton";
 
@@ -18,24 +17,21 @@ export interface ChartCardProps {
   className?: string;
 }
 
-/**
- * Glassmorphism container for charts with loading skeleton and empty states.
- */
 export function ChartCard({
   title,
   subtitle,
   action,
   isLoading = false,
   isEmpty = false,
-  emptyMessage = "No data available for the selected filters.",
+  emptyMessage = "No chart data available.",
   children,
   className,
 }: ChartCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
+      transition={{ duration: 0.3 }}
       className={className}
     >
       <GlassCard hoverable className="flex h-full flex-col gap-4">
@@ -54,23 +50,18 @@ export function ChartCard({
         </div>
 
         {isLoading ? (
-          <div className="flex h-64 flex-col justify-end gap-3 pt-4">
-            <Skeleton className="h-44 w-full rounded-xl" />
-            <div className="flex gap-2">
-              <Skeleton className="h-3 w-1/4" />
-              <Skeleton className="h-3 w-1/4" />
-              <Skeleton className="h-3 w-1/4" />
-            </div>
+          <div className="flex h-60 flex-col justify-end gap-3 pt-4">
+            <Skeleton className="h-44 w-full" />
           </div>
         ) : isEmpty ? (
-          <div className="flex h-64 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300/60 text-center dark:border-white/10">
+          <div className="flex h-60 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300/60 p-4 text-center dark:border-white/10">
             <BarChart3 className="h-7 w-7 text-slate-400" />
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+            <p className="max-w-md text-xs text-slate-500 dark:text-slate-400">
               {emptyMessage}
             </p>
           </div>
         ) : (
-          <div className={cn("w-full flex-1")}>{children}</div>
+          <div className="w-full flex-1">{children}</div>
         )}
       </GlassCard>
     </motion.div>
