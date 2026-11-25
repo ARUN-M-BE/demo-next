@@ -16,7 +16,6 @@ export function GoldSection() {
 
   useEffect(() => {
     let active = true;
-    setLoadingHistory(true);
     fetch(`/api/market/history?asset=GOLD_24K&timeframe=${timeframe}`, {
       cache: "no-store",
     })
@@ -120,7 +119,15 @@ export function GoldSection() {
         isLoading={loadingHistory}
         isEmpty={!loadingHistory && (history?.points.length ?? 0) === 0}
         emptyMessage={history?.message ?? "No gold historical data returned."}
-        action={<TimeframeSelector value={timeframe} onChange={setTimeframe} />}
+        action={
+          <TimeframeSelector
+            value={timeframe}
+            onChange={(tf) => {
+              setLoadingHistory(true);
+              setTimeframe(tf);
+            }}
+          />
+        }
       >
         <GoldChart points={history?.points ?? []} />
       </ChartCard>

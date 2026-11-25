@@ -16,7 +16,6 @@ export function SilverSection() {
 
   useEffect(() => {
     let active = true;
-    setLoadingHistory(true);
     fetch(`/api/market/history?asset=SILVER&timeframe=${timeframe}`, {
       cache: "no-store",
     })
@@ -94,7 +93,15 @@ export function SilverSection() {
         isLoading={loadingHistory}
         isEmpty={!loadingHistory && (history?.points.length ?? 0) === 0}
         emptyMessage={history?.message ?? "No silver historical data returned."}
-        action={<TimeframeSelector value={timeframe} onChange={setTimeframe} />}
+        action={
+          <TimeframeSelector
+            value={timeframe}
+            onChange={(tf) => {
+              setLoadingHistory(true);
+              setTimeframe(tf);
+            }}
+          />
+        }
       >
         <SilverChart points={history?.points ?? []} />
       </ChartCard>

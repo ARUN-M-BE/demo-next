@@ -21,7 +21,6 @@ export function TechnicalAnalysis() {
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
     fetch(`/api/market/indicators?asset=${asset}&timeframe=${timeframe}`, {
       cache: "no-store",
     })
@@ -84,7 +83,10 @@ export function TechnicalAnalysis() {
         <div className="flex flex-wrap items-center gap-2">
           <Select
             value={asset}
-            onChange={(e) => setAsset(e.target.value as MarketAssetId)}
+            onChange={(e) => {
+              setLoading(true);
+              setAsset(e.target.value as MarketAssetId);
+            }}
             options={[
               { value: "GOLD_24K", label: "24K Gold (IBJA)" },
               { value: "GOLD_22K", label: "22K Gold (IBJA)" },
@@ -92,7 +94,13 @@ export function TechnicalAnalysis() {
             ]}
             containerClassName="w-44"
           />
-          <TimeframeSelector value={timeframe} onChange={setTimeframe} />
+          <TimeframeSelector
+            value={timeframe}
+            onChange={(tf) => {
+              setLoading(true);
+              setTimeframe(tf);
+            }}
+          />
         </div>
       </div>
 

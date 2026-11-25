@@ -23,7 +23,6 @@ export function AnimatedCounter({
 
   useEffect(() => {
     if (prefersReducedMotion) {
-      setDisplayValue(value);
       return;
     }
 
@@ -43,10 +42,12 @@ export function AnimatedCounter({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration, prefersReducedMotion]);
 
+  const shownValue = prefersReducedMotion ? value : displayValue;
+
   return (
     <span className="tabular-nums">
       {prefix}
-      {displayValue.toLocaleString("en-IN", {
+      {shownValue.toLocaleString("en-IN", {
         minimumFractionDigits: decimals,
         maximumFractionDigits: decimals,
       })}

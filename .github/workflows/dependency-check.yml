@@ -1,0 +1,53 @@
+name: Dependency Check
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  pull_request:
+    branches:
+      - main
+      - development
+    paths:
+      - "package.json"
+      - "package-lock.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dependency-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit-dependencies:
+    name: Lockfile, Audit & Outdated Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Validate dependency installation
+        run: npm ci
+
+      - name: Run npm security audit
+        id: audit
+        continue-on-error: true
+        run: |
+          echo "### Security Audit Summary" >> "$GITHUB_STEP_SUMMARY"
+          npm audit --audit-level=high || true
+
+      - name: Check for outdated packages (recommendations only)
+        run: |
+          echo "### Outdated Package Recommendations" >> "$GITHUB_STEP_SUMMARY"
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          npm outdated || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

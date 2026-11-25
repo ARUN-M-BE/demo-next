@@ -50,7 +50,6 @@ export function ComparisonSection() {
 
   useEffect(() => {
     let active = true;
-    setLoading(true);
     Promise.all([
       fetch(`/api/market/history?asset=${cfg.a}&timeframe=${timeframe}`).then((r) =>
         r.json()
@@ -112,14 +111,23 @@ export function ComparisonSection() {
           <div className="flex flex-wrap items-center gap-2">
             <Select
               value={pair}
-              onChange={(e) => setPair(e.target.value as ComparisonPair)}
+              onChange={(e) => {
+                setLoading(true);
+                setPair(e.target.value as ComparisonPair);
+              }}
               options={Object.entries(PAIR_CONFIG).map(([value, item]) => ({
                 value,
                 label: item.label,
               }))}
               containerClassName="w-52"
             />
-            <TimeframeSelector value={timeframe} onChange={setTimeframe} />
+            <TimeframeSelector
+              value={timeframe}
+              onChange={(tf) => {
+                setLoading(true);
+                setTimeframe(tf);
+              }}
+            />
           </div>
         }
       >

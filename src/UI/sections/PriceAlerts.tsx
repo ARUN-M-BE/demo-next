@@ -19,7 +19,7 @@ export function PriceAlerts() {
   useEffect(() => {
     void fetchAlerts();
     if (typeof window !== "undefined" && "Notification" in window) {
-      setNotifPerm(Notification.permission);
+      queueMicrotask(() => setNotifPerm(Notification.permission));
     }
   }, [fetchAlerts]);
 

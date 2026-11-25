@@ -51,10 +51,12 @@ export function ThemeProvider({
         stored === "light" || stored === "dark" || stored === "system"
           ? stored
           : defaultTheme;
-      setThemeState(initial);
-      applyTheme(initial);
+      queueMicrotask(() => {
+        setThemeState(initial);
+        applyTheme(initial);
+      });
     } catch {
-      applyTheme(defaultTheme);
+      queueMicrotask(() => applyTheme(defaultTheme));
     }
   }, [applyTheme, defaultTheme, storageKey]);
 
