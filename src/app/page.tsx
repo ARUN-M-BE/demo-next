@@ -1,9 +1,11 @@
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { Loader } from "@/UI";
 import { getFullMarketOverview } from "@/lib/services/marketDataService";
 import { MarketTerminal } from "@/features/market/MarketTerminal";
 
 async function InstantTerminal() {
+  await connection();
   const initialOverview = await getFullMarketOverview();
   return <MarketTerminal initialOverview={initialOverview} />;
 }

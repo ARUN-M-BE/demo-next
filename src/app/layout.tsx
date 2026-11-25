@@ -27,7 +27,11 @@ const NAV_ITEMS = [
   { label: "Analytics Workspace", href: "/dashboard" },
 ];
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   const hasClerkKey = Boolean(
     process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()
   );

@@ -1,10 +1,12 @@
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { Loader } from "@/UI";
 import { getFullMarketOverview } from "@/lib/services/marketDataService";
 import { MarketTerminal } from "@/features/market/MarketTerminal";
 
 async function TerminalWithUser() {
+  await connection();
   const hasClerkKey = Boolean(
     process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.trim()
   );
